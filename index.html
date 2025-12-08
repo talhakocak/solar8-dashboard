@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Solar8 Dashboard V13</title>
+    <title>Solar8 Final V24</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -14,125 +14,139 @@
     <style>
         * { box-sizing: border-box; }
         body {
-            margin: 0; padding: 15px;
+            margin: 0; padding: 20px;
             height: 100vh; width: 100vw; 
             font-family: 'Inter', sans-serif;
             background: linear-gradient(90deg, #030015 0%, #21174B 100%);
             color: white;
-            display: flex; gap: 15px;
+            display: flex; gap: 20px;
             overflow: hidden; 
         }
 
         /* --- SOL PANEL --- */
-        .sidebar { width: 32%; display: flex; flex-direction: column; gap: 15px; }
-        .map-wrapper { flex: 55; position: relative; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .sidebar { width: 28%; display: flex; flex-direction: column; gap: 20px; height: 100%; }
+
+        .map-wrapper {
+            flex: 60; position: relative; border-radius: 20px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); background: #111;
+        }
         #map { width: 100%; height: 100%; }
-        .weather-overlay { position: absolute; top: 10px; right: 10px; z-index: 1000; display: flex; gap: 5px; }
-        .w-box { background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; width: 45px; height: 55px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; }
-        .wb-day { font-size: 9px; opacity: 0.8; font-weight: 700; margin-bottom: 2px;}
-        .wb-icon { font-size: 14px; color: #FFC700; margin-bottom: 2px; }
-        .wb-temp { font-size: 11px; font-weight: 800; }
+
+        .weather-overlay { position: absolute; top: 15px; right: 15px; z-index: 1000; display: flex; gap: 8px; }
+        .w-box { background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; width: 50px; height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; }
+        .wb-day { font-size: 9px; opacity: 0.9; font-weight: 700; margin-bottom: 3px;}
+        .wb-icon { font-size: 16px; color: #FFC700; margin-bottom: 3px; }
+        .wb-temp { font-size: 12px; font-weight: 800; }
+
+        .panels-card {
+            flex: 40; background: rgba(255,255,255,0.05); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 20px;
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .panels-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 10px; }
+        .ph-title { font-size: 12px; font-weight: 700; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px;}
+        .ph-badge { font-size: 10px; background: rgba(80, 205, 137, 0.2); color: #50CD89; padding: 4px 8px; border-radius: 6px; font-weight: 700; }
         
-        .panels-card { flex: 45; background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 15px; display: flex; flex-direction: column; overflow: hidden; }
-        .panels-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 8px; }
-        .ph-title { font-size: 11px; font-weight: 700; opacity: 0.8; text-transform: uppercase;}
-        .ph-badge { font-size: 9px; background: rgba(80, 205, 137, 0.2); color: #50CD89; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
-        .panel-list { display: flex; flex-direction: column; gap: 5px; overflow-y: auto; height: 100%; }
+        .panel-list { display: flex; flex-direction: column; gap: 8px; overflow-y: auto; height: 100%; }
         .panel-list::-webkit-scrollbar { width: 0px; }
-        .p-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 8px 10px; border-radius: 6px; }
-        .p-info { display: flex; align-items: center; gap: 8px; }
-        .p-icon { color: #00D2FF; font-size: 10px; opacity: 0.7; }
-        .p-name { font-size: 11px; font-weight: 500; opacity: 0.9; }
-        .p-score { font-size: 11px; font-weight: 700; color: #50CD89; font-family: 'Courier New', monospace; }
+        .p-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 10px 12px; border-radius: 8px; }
+        .p-info { display: flex; align-items: center; gap: 10px; }
+        .p-icon { color: #00D2FF; font-size: 12px; opacity: 0.7; }
+        .p-name { font-size: 12px; font-weight: 500; opacity: 0.9; }
+        .p-score { font-size: 13px; font-weight: 700; color: #50CD89; font-family: 'Courier New', monospace; }
 
         /* --- SAĞ PANEL --- */
-        .main-content { width: 68%; display: flex; flex-direction: column; position: relative; }
+        .main-content { width: 72%; display: flex; flex-direction: column; height: 100%; position: relative; }
         
-        /* HEADER (Notification Eklendi) */
-        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; flex: 0 0 auto; position: relative; z-index: 2000; }
-        .header-text h1 { margin: 0; font-size: 20px; font-weight: 800; }
-        .header-text p { margin: 0; opacity: 0.7; font-size: 11px; }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; flex: 0 0 auto; z-index: 2000; }
+        .header-text h1 { margin: 0; font-size: 24px; font-weight: 800; }
+        .header-text p { margin: 0; opacity: 0.7; font-size: 12px; }
 
-        /* --- BİLDİRİM SİSTEMİ STİLLERİ --- */
+        /* BİLDİRİM */
         .notification-area { position: relative; }
-        
         .bell-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1);
             width: 40px; height: 40px; border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; position: relative; transition: 0.2s;
         }
-        .bell-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.2); }
         .bell-icon { font-size: 18px; color: white; }
-        
         .notif-badge {
-            position: absolute; top: -5px; right: -5px;
-            background: #F1416C; color: white;
-            font-size: 10px; font-weight: 800;
-            width: 18px; height: 18px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            border: 2px solid #030015; /* Arkaplan rengiyle aynı border */
-            animation: pulse-red 2s infinite;
+            position: absolute; top: -5px; right: -5px; background: #F1416C; color: white;
+            font-size: 10px; font-weight: 800; width: 18px; height: 18px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; border: 2px solid #030015; animation: pulse-red 2s infinite;
         }
-        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(241, 65, 108, 0.7); } 100% { box-shadow: 0 0 0 6px rgba(0,0,0,0); } }
-
-        /* Dropdown Menü */
+        
         .dropdown {
-            position: absolute; top: 50px; right: 0; width: 300px;
-            background: rgba(18, 18, 30, 0.95); /* Çok koyu zemin */
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-            padding: 15px;
-            display: none; /* Başlangıçta gizli */
-            flex-direction: column; gap: 10px;
-            transform-origin: top right;
-            animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: absolute; top: 50px; right: 0; width: 320px;
+            background: rgba(18, 18, 30, 0.98); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6); padding: 15px;
+            display: none; flex-direction: column; gap: 10px; z-index: 9999;
         }
         .dropdown.show { display: flex; }
-        
         @keyframes slideDown { from { opacity: 0; transform: scale(0.95) translateY(-10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
         .dd-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;}
-        .dd-title { font-size: 12px; font-weight: 700; color: white; }
-        .dd-clear { font-size: 10px; color: #50CD89; cursor: pointer; font-weight: 600; }
+        .dd-title { font-size: 12px; font-weight: 700; color: white; } .dd-clear { font-size: 10px; color: #50CD89; cursor: pointer; }
         
-        .dd-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.03); transition: 0.2s;}
-        .dd-item:active { background: rgba(255,255,255,0.08); }
-        .dd-icon-box { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .dd-content { display: flex; flex-direction: column; gap: 2px; }
-        .dd-msg { font-size: 11px; font-weight: 600; color: #e1e1e1; line-height: 1.3;}
-        .dd-time { font-size: 9px; opacity: 0.5; }
+        .dd-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.03); }
+        .dd-icon-box { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px;}
+        
+        /* SAAT DÜZELTMESİ: Alt Alta Hizalama */
+        .dd-content { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+        .dd-msg { font-size: 12px; font-weight: 600; color: #e1e1e1; line-height: 1.3;} 
+        .dd-time { font-size: 10px; opacity: 0.5; display: block; } /* Yana gitme, blok ol */
+        
+        .bg-danger { background: rgba(241, 65, 108, 0.2); color: #F1416C; } .bg-warn { background: rgba(255, 199, 0, 0.2); color: #FFC700; } .bg-info { background: rgba(0, 210, 255, 0.2); color: #00D2FF; }
 
-        /* Severity Colors */
-        .bg-danger { background: rgba(241, 65, 108, 0.2); color: #F1416C; }
-        .bg-warn { background: rgba(255, 199, 0, 0.2); color: #FFC700; }
-        .bg-info { background: rgba(0, 210, 255, 0.2); color: #00D2FF; }
+        /* GRID (TAM EKRAN) */
+        .grid { 
+            flex: 1; 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            grid-template-rows: repeat(2, 1fr); 
+            gap: 20px; 
+        }
 
-        /* GRID ve KARTLAR */
-        .grid { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: 15px; }
-        .card { background: rgba(255,255,255,0.06); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .card {
+            background: rgba(255,255,255,0.06); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
+            padding: 20px;
+            display: flex; flex-direction: column; justify-content: space-between; /* İyice yay */
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
         .card-head { display: flex; justify-content: space-between; align-items: center; }
-        .label-grp { display: flex; align-items: center; gap: 6px; }
-        .c-icon { font-size: 16px; }
-        .c-lbl { font-size: 11px; font-weight: 600; opacity: 0.8; text-transform: uppercase; white-space: nowrap; }
-        .badge { padding: 4px 8px; border-radius: 4px; font-size: 9px; font-weight: 700; background: rgba(255,255,255,0.1); }
+        .label-grp { display: flex; align-items: center; gap: 8px; }
+        .c-icon { font-size: 20px; }
+        .c-lbl { font-size: 13px; font-weight: 600; opacity: 0.8; text-transform: uppercase; white-space: nowrap; }
+        
+        .badge { padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; background: rgba(255,255,255,0.1); }
         .badge.green { color: #50CD89; background: rgba(80, 205, 137, 0.15); }
         .badge.purple { color: #bf7cf7; background: rgba(191, 124, 247, 0.15); }
-        .badge.online { color: #50CD89; background: rgba(80, 205, 137, 0.15); display: flex; align-items: center; gap: 5px; }
+        .badge.online { color: #50CD89; background: rgba(80, 205, 137, 0.15); display: flex; align-items: center; gap: 6px; }
         .blink-dot { width: 6px; height: 6px; background-color: #50CD89; border-radius: 50%; animation: blink-animation 1.5s infinite ease-in-out; }
         @keyframes blink-animation { 0% { opacity: 1; box-shadow: 0 0 0 0 rgba(80, 205, 137, 0.7); } 50% { opacity: 0.5; } 100% { opacity: 1; box-shadow: 0 0 0 4px rgba(80, 205, 137, 0); } }
-        .val { font-size: 28px; font-weight: 800; line-height: 1; margin: auto 0;}
-        .unit { font-size: 14px; opacity: 0.5; margin-left: 2px; font-weight: 600; }
-        .epdk-note { font-size: 8px; opacity: 0.4; font-weight: 400; margin-top: 5px; text-align: right; font-style: italic; }
-        .chart-wrap { width: 100%; height: 60px; margin-top: auto; }
-        .accent-y { color: #FFC700; } .accent-b { color: #009EF7; } .accent-r { color: #F1416C; } .accent-c { color: #00D2FF; } .accent-g { color: #50CD89; }
-        .solar-pin { background: rgba(255, 199, 0, 0.9); border: 2px solid white; border-radius: 50%; box-shadow: 0 0 15px #FFC700; width: 16px; height: 16px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 199, 0, 0.7); } 100% { box-shadow: 0 0 0 0 rgba(0,0,0,0); } }
+        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(241, 65, 108, 0.7); } 100% { box-shadow: 0 0 0 6px rgba(0,0,0,0); } }
+
+        .val { font-size: 36px; font-weight: 800; line-height: 1; margin: auto 0; letter-spacing: -0.5px;}
+        .unit { font-size: 16px; opacity: 0.5; margin-left: 4px; font-weight: 600; }
+        .epdk-note { font-size: 9px; opacity: 0.4; font-weight: 400; margin-top: 5px; text-align: right; font-style: italic; }
         
-        @media (max-aspect-ratio: 16/9) { body { flex-direction: column; overflow-y: auto; height: auto; } .sidebar { width: 100%; height: 400px; flex: none; } .main-content { width: 100%; height: auto; } .grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; height: auto; } .card { height: 180px; } }
+        /* GRAFİK BÜYÜTME SİHRİ */
+        .chart-wrap { 
+            width: 100%; 
+            flex-grow: 1; /* Kutudaki tüm boşluğu kapla! */
+            min-height: 0; /* Flex hatasını önler */
+            display: flex;
+            align-items: flex-end;
+            margin-top: 10px;
+        }
+        /* Canvas'ı zorla büyüt */
+        .chart-wrap canvas { width: 100% !important; height: 100% !important; }
+
+        .accent-y { color: #FFC700; } .accent-b { color: #009EF7; } .accent-r { color: #F1416C; } .accent-c { color: #00D2FF; } .accent-g { color: #50CD89; }
+        .solar-pin { background: rgba(255, 199, 0, 0.9); border: 3px solid white; border-radius: 50%; box-shadow: 0 0 20px #FFC700; width: 18px; height: 18px; animation: pulse 2s infinite; }
     </style>
 </head>
 <body>
@@ -157,36 +171,11 @@
                     <i class="fa-regular fa-bell bell-icon"></i>
                     <div class="notif-badge" id="badge">3</div>
                 </div>
-
                 <div class="dropdown" id="dropdown">
-                    <div class="dd-header">
-                        <span class="dd-title">Alarm Geçmişi</span>
-                        <span class="dd-clear" onclick="clearNotifs()">Hepsini Okundu Say</span>
-                    </div>
-                    
-                    <div class="dd-item">
-                        <div class="dd-icon-box bg-danger"><i class="fa-solid fa-triangle-exclamation"></i></div>
-                        <div class="dd-content">
-                            <span class="dd-msg">İnverter #03 DC Aşırı Gerilim Hatası (Kritik)</span>
-                            <span class="dd-time">10 dk önce</span>
-                        </div>
-                    </div>
-
-                    <div class="dd-item">
-                        <div class="dd-icon-box bg-warn"><i class="fa-solid fa-broom"></i></div>
-                        <div class="dd-content">
-                            <span class="dd-msg">Panel Dizisi #05 Verim Düşüklüğü (Temizlik)</span>
-                            <span class="dd-time">2 saat önce</span>
-                        </div>
-                    </div>
-
-                    <div class="dd-item">
-                        <div class="dd-icon-box bg-info"><i class="fa-solid fa-clipboard-check"></i></div>
-                        <div class="dd-content">
-                            <span class="dd-msg">Günlük Üretim Raporu Hazırlandı</span>
-                            <span class="dd-time">Bugün 06:00</span>
-                        </div>
-                    </div>
+                    <div class="dd-header"><span class="dd-title">Alarm Geçmişi</span><span class="dd-clear" onclick="clearNotifs()">Okundu Say</span></div>
+                    <div class="dd-item"><div class="dd-icon-box bg-danger"><i class="fa-solid fa-triangle-exclamation"></i></div><div class="dd-content"><span class="dd-msg">İnverter #03 DC Hata (Kritik)</span><span class="dd-time">10 dk önce</span></div></div>
+                    <div class="dd-item"><div class="dd-icon-box bg-warn"><i class="fa-solid fa-broom"></i></div><div class="dd-content"><span class="dd-msg">Panel #05 Temizlik Zamanı</span><span class="dd-time">2 saat önce</span></div></div>
+                    <div class="dd-item"><div class="dd-icon-box bg-info"><i class="fa-solid fa-clipboard-check"></i></div><div class="dd-content"><span class="dd-msg">Günlük Rapor Hazırlandı</span><span class="dd-time">06:00</span></div></div>
                 </div>
             </div>
         </div>
@@ -195,75 +184,57 @@
             <div class="card"><div class="card-head"><div class="label-grp"><i class="fa-solid fa-bolt c-icon accent-y"></i><div class="c-lbl">Anlık Güç</div></div><span class="badge online"><div class="blink-dot"></div>Çevrimiçi</span></div><div class="val"><span id="pVal">245.8</span><span class="unit">kW</span></div></div>
             <div class="card"><div class="card-head"><div class="label-grp"><i class="fa-solid fa-sack-dollar c-icon accent-g"></i><div class="c-lbl">Bugün</div></div></div><div class="val"><span id="moneyVal">145.20</span><span class="unit">$</span></div><div class="epdk-note">* 2025 EPDK tarifesine göre</div></div>
             <div class="card"><div class="card-head"><div class="label-grp"><i class="fa-solid fa-chart-pie c-icon accent-b"></i><div class="c-lbl">Verimlilik</div></div><span class="badge purple">Yüksek</span></div><div class="val" id="efVal">%91.4</div></div>
-            <div class="card"><div class="card-head"><div class="c-lbl">Işınım</div></div><div class="val" style="font-size:24px;" id="irVal">850 W/m²</div><div class="chart-wrap"><canvas id="cIr"></canvas></div></div>
-            <div class="card"><div class="card-head"><div class="c-lbl">Modül Isısı</div></div><div class="val" style="font-size:24px;" id="mdVal">42.1 °C</div><div class="chart-wrap"><canvas id="cMd"></canvas></div></div>
-            <div class="card"><div class="card-head"><div class="c-lbl">Nem</div></div><div class="val" style="font-size:24px;" id="hmVal">%45</div><div class="chart-wrap"><canvas id="cHm"></canvas></div></div>
+            
+            <div class="card"><div class="card-head"><div class="c-lbl">Işınım</div></div><div class="val" style="font-size:32px;" id="irVal">850 W/m²</div><div class="chart-wrap"><canvas id="cIr"></canvas></div></div>
+            <div class="card"><div class="card-head"><div class="c-lbl">Modül Isısı</div></div><div class="val" style="font-size:32px;" id="mdVal">42.1 °C</div><div class="chart-wrap"><canvas id="cMd"></canvas></div></div>
+            <div class="card"><div class="card-head"><div class="c-lbl">Nem</div></div><div class="val" style="font-size:32px;" id="hmVal">%45</div><div class="chart-wrap"><canvas id="cHm"></canvas></div></div>
         </div>
     </div>
 
     <script>
-        /* BİLDİRİM FONKSİYONLARI */
-        function toggleDropdown() {
-            const dd = document.getElementById('dropdown');
-            dd.classList.toggle('show');
-        }
+        function toggleDropdown() { document.getElementById('dropdown').classList.toggle('show'); }
+        function clearNotifs() { document.getElementById('badge').style.display='none'; setTimeout(()=>{document.getElementById('dropdown').classList.remove('show');},300); }
+        document.addEventListener('click', function(event) { if (!document.querySelector('.notification-area').contains(event.target)) { document.getElementById('dropdown').classList.remove('show'); } });
 
-        function clearNotifs() {
-            const badge = document.getElementById('badge');
-            if(badge) badge.style.display = 'none'; // Kırmızıyı gizle
-            
-            // Opsiyonel: Menüyü kapat
-            setTimeout(() => {
-                document.getElementById('dropdown').classList.remove('show');
-            }, 300);
-        }
-
-        // Sayfanın herhangi bir yerine tıklayınca menüyü kapat
-        document.addEventListener('click', function(event) {
-            const isClickInside = document.querySelector('.notification-area').contains(event.target);
-            if (!isClickInside) {
-                document.getElementById('dropdown').classList.remove('show');
-            }
-        });
-
-        /* --- HARİTA --- */
         const map = L.map('map', {zoomControl: false}).setView([40.930, 29.324], 14);
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {maxZoom: 19}).addTo(map);
-        const icon = L.divIcon({ className: 'solar-pin', iconSize: [16, 16] });
+        const icon = L.divIcon({ className: 'solar-pin', iconSize: [18, 18] });
         L.marker([40.930, 29.324], { icon: icon }).addTo(map).bindPopup("<b>Teknopark GES</b>").openPopup();
 
-        /* --- HAVA DURUMU --- */
-        async function getWeather() {
-            try {
-                const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=40.93&longitude=29.32&daily=weathercode,temperature_2m_max&timezone=auto&forecast_days=3');
-                const data = await res.json();
-                let html = ''; const days = ['PAZ','PZT','SAL','ÇAR','PER','CUM','CMT'];
-                const getIcon = (c) => (c===0)?'<i class="fa-solid fa-sun wb-icon"></i>':(c<4)?'<i class="fa-solid fa-cloud-sun wb-icon"></i>':'<i class="fa-solid fa-cloud-rain wb-icon" style="color:#00D2FF"></i>';
-                data.daily.time.forEach((d, i) => {
-                    let day = (i===0)?'BUGÜN':days[new Date(d).getDay()];
-                    html += `<div class="w-box"><span class="wb-day">${day}</span>${getIcon(data.daily.weathercode[i])}<span class="wb-temp">${Math.round(data.daily.temperature_2m_max[i])}°</span></div>`;
-                });
-                document.getElementById('weather-widget').innerHTML = html;
-            } catch(e){}
-        }
+        async function getWeather() { try {
+            const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=40.93&longitude=29.32&daily=weathercode,temperature_2m_max&timezone=auto&forecast_days=3');
+            const data = await res.json();
+            let html = ''; const days = ['PAZ','PZT','SAL','ÇAR','PER','CUM','CMT'];
+            const getIcon = (c) => (c===0)?'<i class="fa-solid fa-sun wb-icon"></i>':(c<4)?'<i class="fa-solid fa-cloud-sun wb-icon"></i>':'<i class="fa-solid fa-cloud-rain wb-icon" style="color:#00D2FF"></i>';
+            data.daily.time.forEach((d, i) => { let day = (i===0)?'BUGÜN':days[new Date(d).getDay()]; html += `<div class="w-box"><span class="wb-day">${day}</span>${getIcon(data.daily.weathercode[i])}<span class="wb-temp">${Math.round(data.daily.temperature_2m_max[i])}°</span></div>`; });
+            document.getElementById('weather-widget').innerHTML = html;
+        } catch(e){} }
         getWeather();
 
-        /* --- PANELLER VE GRAFİKLER (ESKİSİ GİBİ) --- */
         const panelContainer = document.getElementById('panel-container');
         let panels = []; for(let i=1; i<=7; i++) panels.push({ id: i, score: 88 + Math.random()*4 });
         function renderPanels() {
             let html = ''; let totalScore = 0;
-            panels.forEach(p => {
-                totalScore += p.score; let color = p.score > 90 ? '#50CD89' : '#FFC700';
-                html += `<div class="p-row"><div class="p-info"><span class="p-name">Dizi #${p.id}</span></div><span class="p-score" style="color:${color}">%${p.score.toFixed(2)}</span></div>`;
-            });
+            panels.forEach(p => { totalScore += p.score; let color = p.score > 90 ? '#50CD89' : '#FFC700'; html += `<div class="p-row"><div class="p-info"><span class="p-name">Dizi #${p.id}</span></div><span class="p-score" style="color:${color}">%${p.score.toFixed(2)}</span></div>`; });
             panelContainer.innerHTML = html;
             document.getElementById('efVal').innerText = "%" + (totalScore/panels.length).toFixed(1);
         }
 
         function chart(ctx, color, data) {
-            let grad = ctx.createLinearGradient(0,0,0,90); grad.addColorStop(0,color.replace('1)','0.5)')); grad.addColorStop(1,color.replace('1)','0)'));
-            return new Chart(ctx, { type:'line', data:{labels:Array(20).fill(''),datasets:[{data:data,borderColor:color,backgroundColor:grad,borderWidth:2,tension:0.4,fill:true,pointRadius:0}]}, options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:false},scales:{x:{display:false},y:{display:true,position:'right',ticks:{color:'rgba(255,255,255,0.5)',font:{size:8},maxTicksLimit:3,precision:0},grid:{display:false}}},layout:{padding:{left:-5,right:0,top:5,bottom:0}}} });
+            let grad = ctx.createLinearGradient(0,0,0,400); /* Gradient uzatıldı */
+            grad.addColorStop(0,color.replace('1)','0.6)')); grad.addColorStop(1,color.replace('1)','0)'));
+            return new Chart(ctx, { 
+                type:'line', 
+                data:{labels:Array(20).fill(''),datasets:[{data:data,borderColor:color,backgroundColor:grad,borderWidth:3,tension:0.4,fill:true,pointRadius:0}]}, 
+                options:{
+                    responsive:true,
+                    maintainAspectRatio:false, /* KUTUYU DOLDURUR */
+                    animation:false,
+                    plugins:{legend:false},
+                    scales:{x:{display:false},y:{display:true,position:'right',ticks:{color:'rgba(255,255,255,0.5)',font:{size:9},maxTicksLimit:3,precision:0},grid:{color:'rgba(255,255,255,0.05)',drawBorder:false}}},
+                    layout:{padding:{left:-5,right:0,top:10,bottom:0}}
+                } 
+            });
         }
         
         let dIr=Array(20).fill(850).map(()=>850+(Math.random()-0.5)*20), dMd=Array(20).fill(42).map(()=>42+(Math.random()-0.5)*2), dHm=Array(20).fill(45).map(()=>45+(Math.random()-0.5)*5);
@@ -274,8 +245,7 @@
         let p=245.8, money=145.50, ir=850, md=42.1, hm=45;
 
         setInterval(()=>{
-            let r=(Math.random()-0.5); p+=r*4; ir+=r*15; if(ir>1000)ir=990; if(ir<200)ir=210; md+=(25+(ir/30)-md)*0.1; hm+=r; 
-            money += 0.01 + (Math.random() * 0.02); 
+            let r=(Math.random()-0.5); p+=r*4; ir+=r*15; if(ir>1000)ir=990; if(ir<200)ir=210; md+=(25+(ir/30)-md)*0.1; hm+=r; money += 0.01 + (Math.random() * 0.02);
             panels.forEach(pan => { let change = (Math.random() - 0.5) * 0.2; pan.score += change; if(pan.score > 92.0) pan.score = 91.9; if(pan.score < 88.0) pan.score = 88.1; });
             renderPanels();
             document.getElementById('pVal').innerText=p.toFixed(1); 
