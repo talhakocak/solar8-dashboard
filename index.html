@@ -174,10 +174,10 @@
 
     <script>
         // --- 1. HARİTA ---
-        const map = L.map('map', {zoomControl: false, attributionControl: false}).setView([37.95, 32.55], 13);
+        const map = L.map('map', {zoomControl: false, attributionControl: false}).setView([40.930, 29.324], 13);
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {maxZoom: 19}).addTo(map);
         const icon = L.divIcon({ className: 'solar-pin', iconSize: [20, 20] });
-        L.marker([37.95, 32.55], { icon: icon }).addTo(map).bindPopup("<b>Solar8 Saha</b>").openPopup();
+        L.marker([40.930, 29.324], { icon: icon }).addTo(map).bindPopup("<b>Solar8 Saha</b>").openPopup();
 
         // --- 2. HAVA DURUMU (API) ---
         async function getWeather() {
@@ -267,3 +267,4 @@
 </body>
 
 </html>
+
