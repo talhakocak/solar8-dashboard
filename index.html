@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Solar8 Final V24</title>
+    <title>Solar8 V25 Okunaklı Final</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -52,7 +52,6 @@
         .panel-list::-webkit-scrollbar { width: 0px; }
         .p-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 10px 12px; border-radius: 8px; }
         .p-info { display: flex; align-items: center; gap: 10px; }
-        .p-icon { color: #00D2FF; font-size: 12px; opacity: 0.7; }
         .p-name { font-size: 12px; font-weight: 500; opacity: 0.9; }
         .p-score { font-size: 13px; font-weight: 700; color: #50CD89; font-family: 'Courier New', monospace; }
 
@@ -92,15 +91,12 @@
         
         .dd-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.03); }
         .dd-icon-box { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px;}
-        
-        /* SAAT DÜZELTMESİ: Alt Alta Hizalama */
         .dd-content { display: flex; flex-direction: column; gap: 4px; width: 100%; }
         .dd-msg { font-size: 12px; font-weight: 600; color: #e1e1e1; line-height: 1.3;} 
-        .dd-time { font-size: 10px; opacity: 0.5; display: block; } /* Yana gitme, blok ol */
-        
+        .dd-time { font-size: 10px; opacity: 0.5; display: block; }
         .bg-danger { background: rgba(241, 65, 108, 0.2); color: #F1416C; } .bg-warn { background: rgba(255, 199, 0, 0.2); color: #FFC700; } .bg-info { background: rgba(0, 210, 255, 0.2); color: #00D2FF; }
 
-        /* GRID (TAM EKRAN) */
+        /* GRID */
         .grid { 
             flex: 1; 
             display: grid; 
@@ -113,7 +109,7 @@
             background: rgba(255,255,255,0.06); backdrop-filter: blur(12px);
             border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
             padding: 20px;
-            display: flex; flex-direction: column; justify-content: space-between; /* İyice yay */
+            display: flex; flex-direction: column; justify-content: space-between;
             box-shadow: 0 8px 25px rgba(0,0,0,0.2);
         }
         .card-head { display: flex; justify-content: space-between; align-items: center; }
@@ -133,16 +129,15 @@
         .unit { font-size: 16px; opacity: 0.5; margin-left: 4px; font-weight: 600; }
         .epdk-note { font-size: 9px; opacity: 0.4; font-weight: 400; margin-top: 5px; text-align: right; font-style: italic; }
         
-        /* GRAFİK BÜYÜTME SİHRİ */
+        /* GRAFİK KÜÇÜLTME (V25 DÜZELTMESİ) */
         .chart-wrap { 
             width: 100%; 
-            flex-grow: 1; /* Kutudaki tüm boşluğu kapla! */
-            min-height: 0; /* Flex hatasını önler */
-            display: flex;
-            align-items: flex-end;
-            margin-top: 10px;
+            height: 60px; /* Sabit, makul bir yükseklik */
+            min-height: 0; 
+            margin-top: 15px; /* Yazılardan biraz daha uzaklaşsın */
+            display: flex; align-items: flex-end;
         }
-        /* Canvas'ı zorla büyüt */
+        /* Canvas'ı bu boyuta uydur */
         .chart-wrap canvas { width: 100% !important; height: 100% !important; }
 
         .accent-y { color: #FFC700; } .accent-b { color: #009EF7; } .accent-r { color: #F1416C; } .accent-c { color: #00D2FF; } .accent-g { color: #50CD89; }
@@ -221,14 +216,14 @@
         }
 
         function chart(ctx, color, data) {
-            let grad = ctx.createLinearGradient(0,0,0,400); /* Gradient uzatıldı */
+            let grad = ctx.createLinearGradient(0,0,0,400); 
             grad.addColorStop(0,color.replace('1)','0.6)')); grad.addColorStop(1,color.replace('1)','0)'));
             return new Chart(ctx, { 
                 type:'line', 
                 data:{labels:Array(20).fill(''),datasets:[{data:data,borderColor:color,backgroundColor:grad,borderWidth:3,tension:0.4,fill:true,pointRadius:0}]}, 
                 options:{
                     responsive:true,
-                    maintainAspectRatio:false, /* KUTUYU DOLDURUR */
+                    maintainAspectRatio:false, 
                     animation:false,
                     plugins:{legend:false},
                     scales:{x:{display:false},y:{display:true,position:'right',ticks:{color:'rgba(255,255,255,0.5)',font:{size:9},maxTicksLimit:3,precision:0},grid:{color:'rgba(255,255,255,0.05)',drawBorder:false}}},
