@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Solar8 Dashboard</title>
+    <title>Solar8 V25 Okunaklı Final</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -159,7 +159,7 @@
 
     <div class="main-content">
         <div class="header">
-            <div class="header-text"><h1>Solar8 Gösterge Paneli</h1><p>Canlı Veri Akışı • Teknopark İstanbul</p></div>
+            <div class="header-text"><h1>Solar8 Saha İzleme</h1><p>Canlı Veri Akışı • Teknopark İstanbul</p></div>
             
             <div class="notification-area">
                 <div class="bell-btn" onclick="toggleDropdown()">
@@ -232,12 +232,12 @@
             });
         }
         
-        let dIr=Array(20).fill(410).map(()=>410+(Math.random()-0.5)*20),let dMd=Array(20).fill(24).map(()=>24+(Math.random()-0.5)*2),let dHm=Array(20).fill(65).map(()=>65+(Math.random()-0.5)*5);
+        let dIr=Array(20).fill(850).map(()=>850+(Math.random()-0.5)*20), dMd=Array(20).fill(42).map(()=>42+(Math.random()-0.5)*2), dHm=Array(20).fill(45).map(()=>45+(Math.random()-0.5)*5);
         const c1=chart(document.getElementById('cIr').getContext('2d'),'rgba(255,199,0,1)',dIr);
         const c2=chart(document.getElementById('cMd').getContext('2d'),'rgba(241,65,108,1)',dMd);
         const c3=chart(document.getElementById('cHm').getContext('2d'),'rgba(0,210,255,1)',dHm);
 
-        let p=112.4, money=42.50, ir=410, md=24.5, hm=65;
+        let p=245.8, money=145.50, ir=850, md=42.1, hm=45;
 
         setInterval(()=>{
             let r=(Math.random()-0.5); p+=r*4; ir+=r*15; if(ir>1000)ir=990; if(ir<200)ir=210; md+=(25+(ir/30)-md)*0.1; hm+=r; money += 0.01 + (Math.random() * 0.02);
