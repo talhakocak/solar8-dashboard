@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Solar8</title>
+    <title>Solar8 Dashboard</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -98,7 +98,8 @@
 
         /* GRID */
         .grid { 
-            flex: 1; display: grid; 
+            flex: 1; 
+            display: grid; 
             grid-template-columns: repeat(3, 1fr); 
             grid-template-rows: repeat(2, 1fr); 
             gap: 20px; 
@@ -128,14 +129,15 @@
         .unit { font-size: 16px; opacity: 0.5; margin-left: 4px; font-weight: 600; }
         .epdk-note { font-size: 9px; opacity: 0.4; font-weight: 400; margin-top: 5px; text-align: right; font-style: italic; }
         
-        /* GRAFİK BÜYÜTME (FLEX-GROW İLE) */
+        /* GRAFİK KÜÇÜLTME (V25 DÜZELTMESİ) */
         .chart-wrap { 
             width: 100%; 
-            flex-grow: 1; /* Grafikler kutuyu doldurur */
+            height: 60px; /* Sabit, makul bir yükseklik */
             min-height: 0; 
-            margin-top: 15px; 
+            margin-top: 15px; /* Yazılardan biraz daha uzaklaşsın */
             display: flex; align-items: flex-end;
         }
+        /* Canvas'ı bu boyuta uydur */
         .chart-wrap canvas { width: 100% !important; height: 100% !important; }
 
         .accent-y { color: #FFC700; } .accent-b { color: #009EF7; } .accent-r { color: #F1416C; } .accent-c { color: #00D2FF; } .accent-g { color: #50CD89; }
@@ -174,13 +176,13 @@
         </div>
 
         <div class="grid">
-            <div class="card"><div class="card-head"><div class="label-grp"><i class="fa-solid fa-bolt c-icon accent-y"></i><div class="c-lbl">Anlık Güç</div></div><span class="badge online"><div class="blink-dot"></div>Çevrimiçi</span></div><div class="val"><span id="pVal">112.4</span><span class="unit">kW</span></div></div>
-            <div class="card"><div class="card-head"><div class="label-grp"><i class="fa-solid fa-sack-dollar c-icon accent-g"></i><div class="c-lbl">Bugün</div></div></div><div class="val"><span id="moneyVal">42.50</span><span class="unit">$</span></div><div class="epdk-note">* 2025 EPDK tarifesine göre</div></div>
+            <div class="card"><div class="card-head"><div class="label-grp"><i class="fa-solid fa-bolt c-icon accent-y"></i><div class="c-lbl">Anlık Güç</div></div><span class="badge online"><div class="blink-dot"></div>Çevrimiçi</span></div><div class="val"><span id="pVal">245.8</span><span class="unit">kW</span></div></div>
+            <div class="card"><div class="card-head"><div class="label-grp"><i class="fa-solid fa-sack-dollar c-icon accent-g"></i><div class="c-lbl">Bugün</div></div></div><div class="val"><span id="moneyVal">145.20</span><span class="unit">$</span></div><div class="epdk-note">* 2025 EPDK tarifesine göre</div></div>
             <div class="card"><div class="card-head"><div class="label-grp"><i class="fa-solid fa-chart-pie c-icon accent-b"></i><div class="c-lbl">Verimlilik</div></div><span class="badge purple">Yüksek</span></div><div class="val" id="efVal">%91.4</div></div>
             
-            <div class="card"><div class="card-head"><div class="c-lbl">Işınım</div></div><div class="val" style="font-size:32px;" id="irVal">410 W/m²</div><div class="chart-wrap"><canvas id="cIr"></canvas></div></div>
-            <div class="card"><div class="card-head"><div class="c-lbl">Modül Isısı</div></div><div class="val" style="font-size:32px;" id="mdVal">24.5 °C</div><div class="chart-wrap"><canvas id="cMd"></canvas></div></div>
-            <div class="card"><div class="card-head"><div class="c-lbl">Nem</div></div><div class="val" style="font-size:32px;" id="hmVal">%65</div><div class="chart-wrap"><canvas id="cHm"></canvas></div></div>
+            <div class="card"><div class="card-head"><div class="c-lbl">Işınım</div></div><div class="val" style="font-size:32px;" id="irVal">850 W/m²</div><div class="chart-wrap"><canvas id="cIr"></canvas></div></div>
+            <div class="card"><div class="card-head"><div class="c-lbl">Modül Isısı</div></div><div class="val" style="font-size:32px;" id="mdVal">42.1 °C</div><div class="chart-wrap"><canvas id="cMd"></canvas></div></div>
+            <div class="card"><div class="card-head"><div class="c-lbl">Nem</div></div><div class="val" style="font-size:32px;" id="hmVal">%45</div><div class="chart-wrap"><canvas id="cHm"></canvas></div></div>
         </div>
     </div>
 
@@ -230,11 +232,7 @@
             });
         }
         
-        // KIŞ MODU (ARALIK) - GÜNCEL VERİLER
-        let dIr=Array(20).fill(410).map(()=>410+(Math.random()-0.5)*20);
-        let dMd=Array(20).fill(24).map(()=>24+(Math.random()-0.5)*2);
-        let dHm=Array(20).fill(65).map(()=>65+(Math.random()-0.5)*5);
-
+        let dIr=Array(20).fill(410).map(()=>410+(Math.random()-0.5)*20),let dMd=Array(20).fill(24).map(()=>24+(Math.random()-0.5)*2),let dHm=Array(20).fill(65).map(()=>65+(Math.random()-0.5)*5);
         const c1=chart(document.getElementById('cIr').getContext('2d'),'rgba(255,199,0,1)',dIr);
         const c2=chart(document.getElementById('cMd').getContext('2d'),'rgba(241,65,108,1)',dMd);
         const c3=chart(document.getElementById('cHm').getContext('2d'),'rgba(0,210,255,1)',dHm);
