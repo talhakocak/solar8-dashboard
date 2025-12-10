@@ -23,7 +23,6 @@
             overflow: hidden; 
         }
 
-        /* --- SOL PANEL --- */
         .sidebar { width: 28%; display: flex; flex-direction: column; gap: 20px; height: 100%; }
 
         .map-wrapper {
@@ -55,14 +54,12 @@
         .p-name { font-size: 12px; font-weight: 500; opacity: 0.9; }
         .p-score { font-size: 13px; font-weight: 700; color: #50CD89; font-family: 'Courier New', monospace; }
 
-        /* --- SAĞ PANEL --- */
         .main-content { width: 72%; display: flex; flex-direction: column; height: 100%; position: relative; }
         
         .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; flex: 0 0 auto; z-index: 2000; }
         .header-text h1 { margin: 0; font-size: 24px; font-weight: 800; }
         .header-text p { margin: 0; opacity: 0.7; font-size: 12px; }
 
-        /* BİLDİRİM */
         .notification-area { position: relative; }
         .bell-btn {
             background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1);
@@ -96,7 +93,6 @@
         .dd-time { font-size: 10px; opacity: 0.5; display: block; }
         .bg-danger { background: rgba(241, 65, 108, 0.2); color: #F1416C; } .bg-warn { background: rgba(255, 199, 0, 0.2); color: #FFC700; } .bg-info { background: rgba(0, 210, 255, 0.2); color: #00D2FF; }
 
-        /* GRID */
         .grid { 
             flex: 1; 
             display: grid; 
@@ -128,16 +124,13 @@
         .val { font-size: 36px; font-weight: 800; line-height: 1; margin: auto 0; letter-spacing: -0.5px;}
         .unit { font-size: 16px; opacity: 0.5; margin-left: 4px; font-weight: 600; }
         .epdk-note { font-size: 9px; opacity: 0.4; font-weight: 400; margin-top: 5px; text-align: right; font-style: italic; }
-        
-        /* GRAFİK KÜÇÜLTME (V25 DÜZELTMESİ) */
         .chart-wrap { 
             width: 100%; 
-            height: 60px; /* Sabit, makul bir yükseklik */
+            height: 60px; 
             min-height: 0; 
-            margin-top: 15px; /* Yazılardan biraz daha uzaklaşsın */
+            margin-top: 15px;
             display: flex; align-items: flex-end;
-        }
-        /* Canvas'ı bu boyuta uydur */
+        } 
         .chart-wrap canvas { width: 100% !important; height: 100% !important; }
 
         .accent-y { color: #FFC700; } .accent-b { color: #009EF7; } .accent-r { color: #F1416C; } .accent-c { color: #00D2FF; } .accent-g { color: #50CD89; }
