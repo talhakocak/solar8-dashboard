@@ -183,7 +183,7 @@
         </div>
     </div>
 
-    <script>
+<script>
         function toggleDropdown() { document.getElementById('dropdown').classList.toggle('show'); }
         function clearNotifs() { document.getElementById('badge').style.display='none'; setTimeout(()=>{document.getElementById('dropdown').classList.remove('show');},300); }
         document.addEventListener('click', function(event) { if (!document.querySelector('.notification-area').contains(event.target)) { document.getElementById('dropdown').classList.remove('show'); } });
@@ -219,35 +219,47 @@
                 type:'line', 
                 data:{labels:Array(20).fill(''),datasets:[{data:data,borderColor:color,backgroundColor:grad,borderWidth:3,tension:0.4,fill:true,pointRadius:0}]}, 
                 options:{
-                    responsive:true,
-                    maintainAspectRatio:false, 
-                    animation:false,
-                    plugins:{legend:false},
+                    responsive:true, maintainAspectRatio:false, animation:false, plugins:{legend:false},
                     scales:{x:{display:false},y:{display:true,position:'right',ticks:{color:'rgba(255,255,255,0.5)',font:{size:9},maxTicksLimit:3,precision:0},grid:{color:'rgba(255,255,255,0.05)',drawBorder:false}}},
                     layout:{padding:{left:-5,right:0,top:10,bottom:0}}
                 } 
             });
         }
-        
-        let dIr=Array(20).fill(410).map(()=>410+(Math.random()-0.5)*20); 
+        let dIr=Array(20).fill(410).map(()=>410+(Math.random()-0.5)*20);
         let dMd=Array(20).fill(24).map(()=>24+(Math.random()-0.5)*2);
         let dHm=Array(20).fill(65).map(()=>65+(Math.random()-0.5)*5);
+
         const c1=chart(document.getElementById('cIr').getContext('2d'),'rgba(255,199,0,1)',dIr);
         const c2=chart(document.getElementById('cMd').getContext('2d'),'rgba(241,65,108,1)',dMd);
         const c3=chart(document.getElementById('cHm').getContext('2d'),'rgba(0,210,255,1)',dHm);
 
-        let p=112.4, money=42.50, ir=410, md=24.5, hm=65;
+        let money=42.50, ir=410, md=24.5, hm=65, p=112.4;
 
         setInterval(()=>{
-            let r=(Math.random()-0.5); p+=r*4; ir+=r*15; if(ir>1000)ir=990; if(ir<200)ir=210; md+=(25+(ir/30)-md)*0.1; hm+=r; money += 0.01 + (Math.random() * 0.02);
-            panels.forEach(pan => { let change = (Math.random() - 0.5) * 0.2; pan.score += change; if(pan.score > 92.0) pan.score = 91.9; if(pan.score < 88.0) pan.score = 88.1; });
-            renderPanels();
-            document.getElementById('pVal').innerText=p.toFixed(1); 
+            let change = (Math.random() - 0.5) * 10;
+            ir += change;
+            if(ir > 460) ir = 459;
+            if(ir < 360) ir = 361;
+
+            p = ir * 0.275; 
+
+            md += (24 + (ir/100) - md) * 0.1;
+            hm += (Math.random()-0.5);
+            money += 0.01 + (Math.random() * 0.01);
+
+            document.getElementById('pVal').innerText = p.toFixed(1); 
+            document.getElementById('irVal').innerText = ir.toFixed(0) + " W/m²"; 
+            
             document.getElementById('moneyVal').innerText = money.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            document.getElementById('irVal').innerText=ir.toFixed(0)+" W/m²"; document.getElementById('mdVal').innerText=md.toFixed(1)+" °C"; document.getElementById('hmVal').innerText="%"+hm.toFixed(0);
-            function up(c,v){ c.data.datasets[0].data.shift(); c.data.datasets[0].data.push(v); let min = Math.min(...c.data.datasets[0].data); let max = Math.max(...c.data.datasets[0].data); c.options.scales.y.min = Math.floor(min/5)*5; c.options.scales.y.max = Math.ceil(max/5)*5; c.update(); } 
+            document.getElementById('mdVal').innerText = md.toFixed(1) + " °C"; 
+            document.getElementById('hmVal').innerText = "%" + hm.toFixed(0);
+
+            function up(c,v){ c.data.datasets[0].data.shift(); c.data.datasets[0].data.push(v); 
+            let min = Math.min(...c.data.datasets[0].data); let max = Math.max(...c.data.datasets[0].data); 
+            c.options.scales.y.min = Math.floor(min/5)*5; c.options.scales.y.max = Math.ceil(max/5)*5; c.update(); } 
+            
             up(c1,ir); up(c2,md); up(c3,hm);
-        }, 3000);
+        }, 2000);
     </script>
 </body>
 </html>
