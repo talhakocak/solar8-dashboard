@@ -184,83 +184,119 @@
     </div>
 
 <script>
-        function toggleDropdown() { document.getElementById('dropdown').classList.toggle('show'); }
-        function clearNotifs() { document.getElementById('badge').style.display='none'; setTimeout(()=>{document.getElementById('dropdown').classList.remove('show');},300); }
-        document.addEventListener('click', function(event) { if (!document.querySelector('.notification-area').contains(event.target)) { document.getElementById('dropdown').classList.remove('show'); } });
+    /* 1. ARAYÜZ FONKSİYONLARI (Dropdown vs.) */
+    function toggleDropdown() { document.getElementById('dropdown').classList.toggle('show'); }
+    function clearNotifs() { document.getElementById('badge').style.display='none'; setTimeout(()=>{document.getElementById('dropdown').classList.remove('show');},300); }
+    // Boşluğa tıklayınca menüyü kapat
+    document.addEventListener('click', function(event) { if (!document.querySelector('.notification-area').contains(event.target)) { document.getElementById('dropdown').classList.remove('show'); } });
 
-        const map = L.map('map', {zoomControl: false}).setView([40.930, 29.324], 14);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {maxZoom: 19}).addTo(map);
-        const icon = L.divIcon({ className: 'solar-pin', iconSize: [18, 18] });
-        L.marker([40.930, 29.324], { icon: icon }).addTo(map).bindPopup("<b>Teknopark GES</b>").openPopup();
+    /* 2. HARİTA (Teknopark) */
+    const map = L.map('map', {zoomControl: false}).setView([40.930, 29.324], 14);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {maxZoom: 19}).addTo(map);
+    const icon = L.divIcon({ className: 'solar-pin', iconSize: [18, 18] });
+    L.marker([40.930, 29.324], { icon: icon }).addTo(map).bindPopup("<b>Teknopark GES</b>").openPopup();
 
-        async function getWeather() { try {
-            const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=40.93&longitude=29.32&daily=weathercode,temperature_2m_max&timezone=auto&forecast_days=3');
-            const data = await res.json();
-            let html = ''; const days = ['PAZ','PZT','SAL','ÇAR','PER','CUM','CMT'];
-            const getIcon = (c) => (c===0)?'<i class="fa-solid fa-sun wb-icon"></i>':(c<4)?'<i class="fa-solid fa-cloud-sun wb-icon"></i>':'<i class="fa-solid fa-cloud-rain wb-icon" style="color:#00D2FF"></i>';
-            data.daily.time.forEach((d, i) => { let day = (i===0)?'BUGÜN':days[new Date(d).getDay()]; html += `<div class="w-box"><span class="wb-day">${day}</span>${getIcon(data.daily.weathercode[i])}<span class="wb-temp">${Math.round(data.daily.temperature_2m_max[i])}°</span></div>`; });
-            document.getElementById('weather-widget').innerHTML = html;
-        } catch(e){} }
-        getWeather();
+    /* 3. HAVA DURUMU */
+    async function getWeather() { try {
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=40.93&longitude=29.32&daily=weathercode,temperature_2m_max&timezone=auto&forecast_days=3');
+        const data = await res.json();
+        let html = ''; const days = ['PAZ','PZT','SAL','ÇAR','PER','CUM','CMT'];
+        const getIcon = (c) => (c===0)?'<i class="fa-solid fa-sun wb-icon"></i>':(c<4)?'<i class="fa-solid fa-cloud-sun wb-icon"></i>':'<i class="fa-solid fa-cloud-rain wb-icon" style="color:#00D2FF"></i>';
+        data.daily.time.forEach((d, i) => { let day = (i===0)?'BUGÜN':days[new Date(d).getDay()]; html += `<div class="w-box"><span class="wb-day">${day}</span>${getIcon(data.daily.weathercode[i])}<span class="wb-temp">${Math.round(data.daily.temperature_2m_max[i])}°</span></div>`; });
+        document.getElementById('weather-widget').innerHTML = html;
+    } catch(e){} }
+    getWeather();
 
-        const panelContainer = document.getElementById('panel-container');
-        let panels = []; for(let i=1; i<=7; i++) panels.push({ id: i, score: 88 + Math.random()*4 });
-        function renderPanels() {
-            let html = ''; let totalScore = 0;
-            panels.forEach(p => { totalScore += p.score; let color = p.score > 90 ? '#50CD89' : '#FFC700'; html += `<div class="p-row"><div class="p-info"><span class="p-name">Dizi #${p.id}</span></div><span class="p-score" style="color:${color}">%${p.score.toFixed(2)}</span></div>`; });
-            panelContainer.innerHTML = html;
-            document.getElementById('efVal').innerText = "%" + (totalScore/panels.length).toFixed(1);
-        }
+    /* 4. DİZİ (STRING) PERFORMANSI - KAYBOLAN KISIM BURASIYDI */
+    const panelContainer = document.getElementById('panel-container');
+    let panels = []; 
+    // 7 Tane sahte dizi oluşturuyoruz
+    for(let i=1; i<=7; i++) panels.push({ id: i, score: 88 + Math.random()*4 });
 
-        function chart(ctx, color, data) {
-            let grad = ctx.createLinearGradient(0,0,0,400); 
-            grad.addColorStop(0,color.replace('1)','0.6)')); grad.addColorStop(1,color.replace('1)','0)'));
-            return new Chart(ctx, { 
-                type:'line', 
-                data:{labels:Array(20).fill(''),datasets:[{data:data,borderColor:color,backgroundColor:grad,borderWidth:3,tension:0.4,fill:true,pointRadius:0}]}, 
-                options:{
-                    responsive:true, maintainAspectRatio:false, animation:false, plugins:{legend:false},
-                    scales:{x:{display:false},y:{display:true,position:'right',ticks:{color:'rgba(255,255,255,0.5)',font:{size:9},maxTicksLimit:3,precision:0},grid:{color:'rgba(255,255,255,0.05)',drawBorder:false}}},
-                    layout:{padding:{left:-5,right:0,top:10,bottom:0}}
-                } 
-            });
-        }
-        let dIr=Array(20).fill(410).map(()=>410+(Math.random()-0.5)*20);
-        let dMd=Array(20).fill(24).map(()=>24+(Math.random()-0.5)*2);
-        let dHm=Array(20).fill(65).map(()=>65+(Math.random()-0.5)*5);
+    function renderPanels() {
+        let html = ''; let totalScore = 0;
+        panels.forEach(p => {
+            totalScore += p.score; 
+            // Skora göre renk (90 üstü yeşil, altı sarı)
+            let color = p.score > 90 ? '#50CD89' : '#FFC700'; 
+            html += `<div class="p-row"><div class="p-info"><span class="p-name">Dizi #${p.id}</span></div><span class="p-score" style="color:${color}">%${p.score.toFixed(2)}</span></div>`;
+        });
+        panelContainer.innerHTML = html;
+        document.getElementById('efVal').innerText = "%" + (totalScore/panels.length).toFixed(1);
+    }
 
-        const c1=chart(document.getElementById('cIr').getContext('2d'),'rgba(255,199,0,1)',dIr);
-        const c2=chart(document.getElementById('cMd').getContext('2d'),'rgba(241,65,108,1)',dMd);
-        const c3=chart(document.getElementById('cHm').getContext('2d'),'rgba(0,210,255,1)',dHm);
+    /* 5. GRAFİK AYARLARI */
+    function chart(ctx, color, data) {
+        let grad = ctx.createLinearGradient(0,0,0,400); 
+        grad.addColorStop(0,color.replace('1)','0.6)')); grad.addColorStop(1,color.replace('1)','0)'));
+        return new Chart(ctx, { 
+            type:'line', 
+            data:{labels:Array(20).fill(''),datasets:[{data:data,borderColor:color,backgroundColor:grad,borderWidth:3,tension:0.4,fill:true,pointRadius:0}]}, 
+            options:{
+                responsive:true,
+                maintainAspectRatio:false, 
+                animation:false,
+                plugins:{legend:false},
+                scales:{x:{display:false},y:{display:true,position:'right',ticks:{color:'rgba(255,255,255,0.5)',font:{size:9},maxTicksLimit:3,precision:0},grid:{color:'rgba(255,255,255,0.05)',drawBorder:false}}},
+                layout:{padding:{left:-5,right:0,top:10,bottom:0}}
+            } 
+        });
+    }
+    
+    /* 6. BAŞLANGIÇ DEĞERLERİ (KIŞ MODU - ARALIK) */
+    // Grafiklerin başlangıç verisi (Kışa uygun düşük değerler)
+    let dIr=Array(20).fill(410).map(()=>410+(Math.random()-0.5)*20);
+    let dMd=Array(20).fill(24).map(()=>24+(Math.random()-0.5)*2);
+    let dHm=Array(20).fill(65).map(()=>65+(Math.random()-0.5)*5);
 
-        let money=42.50, ir=410, md=24.5, hm=65, p=112.4;
+    // Grafikleri Başlat
+    const c1=chart(document.getElementById('cIr').getContext('2d'),'rgba(255,199,0,1)',dIr);
+    const c2=chart(document.getElementById('cMd').getContext('2d'),'rgba(241,65,108,1)',dMd);
+    const c3=chart(document.getElementById('cHm').getContext('2d'),'rgba(0,210,255,1)',dHm);
 
-        setInterval(()=>{
-            let change = (Math.random() - 0.5) * 10;
-            ir += change;
-            if(ir > 460) ir = 459;
-            if(ir < 360) ir = 361;
+    // Ana Değişkenler (Kış Modu)
+    let money=42.50, ir=410, md=24.5, hm=65, p=112.4;
 
-            p = ir * 0.275; 
+    /* 7. CANLI DÖNGÜ (HER 2 SANİYEDE BİR) */
+    setInterval(()=>{
+        // Işınımı hafif değiştir (350-460 arası kalsın)
+        let change = (Math.random() - 0.5) * 10;
+        ir += change;
+        if(ir > 460) ir = 459;
+        if(ir < 360) ir = 361;
 
-            md += (24 + (ir/100) - md) * 0.1;
-            hm += (Math.random()-0.5);
-            money += 0.01 + (Math.random() * 0.01);
+        // GÜCÜ HESAPLA (Işınıma bağlı, asla eksi olmaz)
+        p = ir * 0.275; 
 
-            document.getElementById('pVal').innerText = p.toFixed(1); 
-            document.getElementById('irVal').innerText = ir.toFixed(0) + " W/m²"; 
-            
-            document.getElementById('moneyVal').innerText = money.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            document.getElementById('mdVal').innerText = md.toFixed(1) + " °C"; 
-            document.getElementById('hmVal').innerText = "%" + hm.toFixed(0);
+        // Diğer verileri güncelle
+        md += (24 + (ir/100) - md) * 0.1; // Sıcaklık
+        hm += (Math.random()-0.5); // Nem
+        money += 0.01 + (Math.random() * 0.01); // Para yavaşça artsın
 
-            function up(c,v){ c.data.datasets[0].data.shift(); c.data.datasets[0].data.push(v); 
-            let min = Math.min(...c.data.datasets[0].data); let max = Math.max(...c.data.datasets[0].data); 
-            c.options.scales.y.min = Math.floor(min/5)*5; c.options.scales.y.max = Math.ceil(max/5)*5; c.update(); } 
-            
-            up(c1,ir); up(c2,md); up(c3,hm);
-        }, 2000);
-    </script>
+        // Panel skorlarını hafif oynat
+        panels.forEach(pan => { 
+            let pChange = (Math.random() - 0.5) * 0.2; 
+            pan.score += pChange; 
+            if(pan.score > 92.0) pan.score = 91.9; 
+            if(pan.score < 88.0) pan.score = 88.1; 
+        });
+        renderPanels(); // LİSTEYİ GÜNCELLE
+
+        // Ekrana Yaz
+        document.getElementById('pVal').innerText=p.toFixed(1); 
+        document.getElementById('moneyVal').innerText = money.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('irVal').innerText=ir.toFixed(0)+" W/m²"; 
+        document.getElementById('mdVal').innerText=md.toFixed(1)+" °C"; 
+        document.getElementById('hmVal').innerText="%"+hm.toFixed(0);
+
+        // Grafikleri Kaydır
+        function up(c,v){ c.data.datasets[0].data.shift(); c.data.datasets[0].data.push(v); 
+        let min = Math.min(...c.data.datasets[0].data); let max = Math.max(...c.data.datasets[0].data); 
+        c.options.scales.y.min = Math.floor(min/5)*5; c.options.scales.y.max = Math.ceil(max/5)*5; c.update(); } 
+        
+        up(c1,ir); up(c2,md); up(c3,hm);
+    }, 2000);
+</script>
 </body>
 </html>
 
